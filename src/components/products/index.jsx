@@ -6,28 +6,25 @@ function ProductComponent(props) {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState("");
 
-
+    const fetchProducts = async () => {
+        setIsLoading(true);
+        setProducts([]);
+        setError("");
+        const response = await fetch('https://fakestoreapi.com/products', { method: 'GET' });
+        const data = await response.json()
+        if (response.status !== 200) {
+            alert(data.message || 'Could Not Fetch Products');
+            setProducts([]);
+            setIsLoading(false);
+            setError(data.message || 'Could Not Fetch Products');
+            return;
+        }
+        setProducts(data);
+        setIsLoading(false);
+        setError("");
+    }
 
     useEffect(() => {
-        const fetchProducts = async () => {
-            setIsLoading(true);
-            setProducts([]);
-            setError("");
-            const response = await fetch('https://fakestoreapi.com/products', { method: 'GET' });
-            const data = await response.json()
-            if (response.status !== 200) {
-                alert(data.message || 'Could Not Fetch Products');
-                setProducts([]);
-                setIsLoading(false);
-                setError(data.message || 'Could Not Fetch Products');
-                return;
-            }
-            setProducts(data);
-            setIsLoading(false);
-            setError("");
-        }
-
-        // Call the fetch function
         fetchProducts();
     }, []);
 
